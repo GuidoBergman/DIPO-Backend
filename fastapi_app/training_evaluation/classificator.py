@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import re
 
-LABEL_LIST = ['attackOnReputation', 'manipulativeWording']
+LABEL_LIST = ['AttackOnReputation', 'ManipulativeWording']
 
 class Classificator:
   def __init__(self, model_name, model_file_name, evaluation_threshold):
@@ -28,6 +28,11 @@ class Classificator:
       outputs = self.model(ids, mask, token_type_ids)
       outputs = torch.sigmoid(outputs).cpu().detach().numpy().tolist()
   
+    # Borrame
+    for i, output in  enumerate(outputs):
+      print(sentences[i])
+      print(output)
+
     outputs = np.array(outputs) >= self.evaluation_threshold
   
     techniques = {

@@ -6,5 +6,5 @@ class ClassificationInput(BaseModel):
     text: str
 
 class ClassificationOutput(BaseModel):
-    attackOnReputation: list[str]
-    manipulativeWording: list[str]
+    AttackOnReputation: list[str]
+    ManipulativeWording: list[str]
