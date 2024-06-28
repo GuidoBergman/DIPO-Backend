@@ -11,6 +11,7 @@ model_name = environ.get('MODEL_NAME')
 model_file_name = environ.get('MODEL_FILE_NAME')
 evaluation_threshold = float(environ.get('EVALUATION_THRESHOLD'))
 max_upload_size = int(environ.get('MAX_UPLOAD_SIZE'))
+batch_size = int(environ.get('BATCH_SIZE'))
 
 app = FastAPI()
 
@@ -26,7 +27,7 @@ app.add_middleware(LimitUploadSize, max_upload_size=max_upload_size)
 
 
 
-classificator = Classificator(model_name, model_file_name, evaluation_threshold)
+classificator = Classificator(model_name, model_file_name, evaluation_threshold, batch_size)
 
 
 

@@ -2,11 +2,12 @@ from transformers import AutoTokenizer
 import torch
 import numpy as np
 import re
+from more_itertools import chunked
 
 LABEL_LIST = ['AttackOnReputation', 'ManipulativeWording']
 
 class Classificator:
-  def __init__(self, model_name, model_file_name, evaluation_threshold):
+  def __init__(self, model_name, model_file_name, evaluation_threshold, batch_size):
       self.tokenizer = AutoTokenizer.from_pretrained(model_name, return_dict=False)
 
       self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -17,31 +18,35 @@ class Classificator:
 
       self.evaluation_threshold = evaluation_threshold
       self.label_list = LABEL_LIST
+      self.batch_size = batch_size
 
 
   def classify(self, text):
     sentences = re.split(r'[.!?]\s*', text)
     sentences = [s.strip() for s in sentences if s.strip()]
-    ids, mask, token_type_ids = self.encode(sentences)
-
-    with torch.no_grad():
-      outputs = self.model(ids, mask, token_type_ids)
-      outputs = torch.sigmoid(outputs).cpu().detach().numpy().tolist()
-  
-    # Borrame
-    for i, output in  enumerate(outputs):
-      print(sentences[i])
-      print(output)
-
-    outputs = np.array(outputs) >= self.evaluation_threshold
-  
+    
     techniques = {
       label: [] for label in self.label_list
     }
-    for i, output in  enumerate(outputs):
-      for has_label, label in zip(output, self.label_list):
-        if has_label:
-          techniques[label].append(sentences[i])
+     
+    
+    for batch in chunked(sentences, self.batch_size):
+      ids, mask, token_type_ids = self.encode(batch)
+      with torch.no_grad():
+        outputs = self.model(ids, mask, token_type_ids)
+        outputs = torch.sigmoid(outputs).cpu().detach().numpy().tolist()
+
+      outputs = np.array(outputs) >= self.evaluation_threshold
+  
+      # Borrame
+      for i, output in  enumerate(outputs):
+        print(batch[i])
+        print(output) 
+
+      for i, output in  enumerate(outputs):
+        for has_label, label in zip(output, self.label_list):
+          if has_label:
+            techniques[label].append(sentences[i])
   
     return techniques
 
