@@ -36,17 +36,17 @@ class Classificator:
         outputs = self.model(ids, mask, token_type_ids)
         outputs = torch.sigmoid(outputs).cpu().detach().numpy().tolist()
 
-      outputs = np.array(outputs) >= self.evaluation_threshold
-  
       # Borrame
       for i, output in  enumerate(outputs):
         print(batch[i])
         print(output) 
 
+      outputs = np.array(outputs) >= self.evaluation_threshold
+
       for i, output in  enumerate(outputs):
         for has_label, label in zip(output, self.label_list):
           if has_label:
-            techniques[label].append(sentences[i])
+            techniques[label].append(batch[i])
   
     return techniques
 
