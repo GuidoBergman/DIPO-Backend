@@ -1,7 +1,9 @@
 from transformers import AutoTokenizer
 import torch
 import numpy as np
-import re
+import nltk
+nltk.download('punkt')
+from nltk.tokenize import sent_tokenize
 from more_itertools import chunked
 
 LABEL_LIST = ['AttackOnReputation', 'ManipulativeWording']
@@ -22,8 +24,7 @@ class Classificator:
 
 
   def classify(self, text):
-    sentences = re.split(r'[.!?]\s*', text)
-    sentences = [s.strip() for s in sentences if s.strip()]
+    sentences = sent_tokenize(text)
     
     techniques = {
       label: [] for label in self.label_list
