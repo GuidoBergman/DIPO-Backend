@@ -20,5 +20,6 @@ The API will be available on `http://localhost:8000/`.
 
 ## Run with docker
 
-docker build -t 'dipo-backend:latest' .
- docker run -it --rm -p 8000:8000 --env-file .env dipo-backend
+sudo systemctl start docker
+sudo docker build -t 'dipo-backend:latest' .
+sudo docker run -it --rm -p 8000:8000 --env-file .env dipo-backend
