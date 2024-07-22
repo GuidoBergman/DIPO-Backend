@@ -4,3 +4,4 @@ _model/*
 */__pycache__/*
 */*/__pycache__/*
 fastapi_app/__pycache__/*
+log.csv

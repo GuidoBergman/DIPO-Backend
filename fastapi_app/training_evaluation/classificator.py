@@ -7,7 +7,7 @@ from more_itertools import chunked
 LABEL_LIST = ['AttackOnReputation', 'ManipulativeWording']
 
 class Classificator:
-  def __init__(self, model_name, model_file_name, evaluation_threshold, batch_size):
+  def __init__(self, model_name, model_file_name, evaluation_threshold, batch_size, logging_file):
       self.tokenizer = AutoTokenizer.from_pretrained(model_name, return_dict=False)
 
       self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -19,11 +19,14 @@ class Classificator:
       self.evaluation_threshold = evaluation_threshold
       self.label_list = LABEL_LIST
       self.batch_size = batch_size
+      self.logging_file = logging_file
 
 
   def classify(self, text):
     sentences = re.split(r'[.!?]\s*', text)
     sentences = [s.strip() for s in sentences if s.strip()]
+
+    log_str = ''
     
     techniques = {
       label: [] for label in self.label_list
@@ -36,10 +39,10 @@ class Classificator:
         outputs = self.model(ids, mask, token_type_ids)
         outputs = torch.sigmoid(outputs).cpu().detach().numpy().tolist()
 
-      # Borrame
-      for i, output in  enumerate(outputs):
-        print(batch[i])
-        print(output) 
+
+      if self.logging_file:
+        for i, output in  enumerate(outputs):
+          log_str += batch[i] + ';' + str(output[0]) + ';' + str(output[1]) + '\n'
 
       outputs = np.array(outputs) >= self.evaluation_threshold
 
@@ -47,6 +50,10 @@ class Classificator:
         for has_label, label in zip(output, self.label_list):
           if has_label:
             techniques[label].append(batch[i])
+
+    if self.logging_file:
+      with open(self.logging_file, "a") as f:
+        f.write(log_str)        
   
     return techniques
 
