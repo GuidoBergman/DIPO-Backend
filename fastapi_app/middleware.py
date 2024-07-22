@@ -27,5 +27,4 @@ class LogRequests(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         print(f"Received request: {request.method} {request.url}")
         print(f"Headers: {request.headers}")
-        print(f"Body: {await request.json()}")
         return await call_next(request)
