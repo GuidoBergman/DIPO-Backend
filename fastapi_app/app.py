@@ -5,7 +5,7 @@ from os import environ
 
 from schemas import ClassificationInput, ClassificationOutput
 from training_evaluation.classificator import Classificator
-from middleware import LimitUploadSize
+from middleware import LimitUploadSize, LogRequests
 
 model_name = environ.get('MODEL_NAME')
 model_file_name = environ.get('MODEL_FILE_NAME')
@@ -25,6 +25,8 @@ app.add_middleware(
 )
 
 app.add_middleware(LimitUploadSize, max_upload_size=max_upload_size)
+app.add_middleware(LogRequests)
+
 
 
 
