@@ -7,6 +7,7 @@ from schemas import ClassificationInput, ClassificationOutput
 from training_evaluation.classificator import Classificator
 from middleware import LimitUploadSize
 
+
 model_name = environ.get('MODEL_NAME')
 model_file_name = environ.get('MODEL_FILE_NAME')
 evaluation_threshold = float(environ.get('EVALUATION_THRESHOLD'))
@@ -15,6 +16,8 @@ batch_size = int(environ.get('BATCH_SIZE'))
 logging_file = environ.get('LOGGING_FILE')
 
 app = FastAPI()
+
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,4 +41,4 @@ def classify(input: ClassificationInput, content_length: int = Header(..., alias
     
 
 if __name__ == "__main__":
-    uvicorn.run("fastapi_app.app:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("fastapi_app.app:app", host="0.0.0.0", port=8000, reload=True, ssl_keyfile="key.pem", ssl_certfile="cert.pem")
