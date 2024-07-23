@@ -14,6 +14,8 @@ evaluation_threshold = float(environ.get('EVALUATION_THRESHOLD'))
 max_upload_size = int(environ.get('MAX_UPLOAD_SIZE'))
 batch_size = int(environ.get('BATCH_SIZE'))
 logging_file = environ.get('LOGGING_FILE')
+ssl_keyfile = environ.get('SSL_KEYFILE')
+ssl_certfile = environ.get('SSL_CERTFILE')
 
 app = FastAPI()
 
@@ -41,4 +43,4 @@ def classify(input: ClassificationInput, content_length: int = Header(..., alias
     
 
 if __name__ == "__main__":
-    uvicorn.run("fastapi_app.app:app", host="0.0.0.0", port=8000, reload=True, ssl_keyfile="key.pem", ssl_certfile="cert.pem")
+    uvicorn.run("fastapi_app.app:app", host="0.0.0.0", port=8000, reload=True, ssl_keyfile=ssl_keyfile, ssl_certfile=ssl_certfile)
