@@ -3,6 +3,18 @@
 
 ## Local installation & usage
 
+To run you need a .env file with the following variables defined:
+- MODEL_NAME
+- MODEL_FILE_NAME
+- EVALUATION_THRESHOLD
+- MAX_UPLOAD_SIZE
+- BATCH_SIZE
+- LOGGING_FILE
+- SSL_CERTFILE
+- SSL_KEYFILE
+
+The paths in SSL_CERTFILE and SSL_KEYFILE must start with certificates/
+
 1. Install dependencies
 ```
 curl -sSL https://install.python-poetry.org | python3 -
