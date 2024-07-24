@@ -23,7 +23,7 @@ class Classificator:
 
 
   def classify(self, text):
-    sentences = re.findall(r'[^.!?]+[.!?]', text)
+    sentences = re.split(r'[.!?]\s*', text)
     sentences = [s.strip() for s in sentences if s.strip()]
 
     log_str = ''
