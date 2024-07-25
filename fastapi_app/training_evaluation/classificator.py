@@ -3,6 +3,7 @@ import torch
 import numpy as np
 import re
 from more_itertools import chunked
+from fastapi_app.training_evaluation.splitter import Splitter
 
 LABEL_LIST = ['AttackOnReputation', 'ManipulativeWording']
 
@@ -21,10 +22,12 @@ class Classificator:
       self.batch_size = batch_size
       self.logging_file = logging_file
 
+      self.splitter = Splitter()
+
 
   def classify(self, text):
-    sentences = re.split(r'[.!?]\s*', text)
-    sentences = [s.strip() for s in sentences if s.strip()]
+    sentences = self.splitter.split_sentences(text)
+    
 
     log_str = ''
     

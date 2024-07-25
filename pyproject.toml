@@ -17,6 +17,8 @@ numpy = "^1.26.4"
 more-itertools = "^10.3.0"
 torch = {version = "^2.3.1+cpu", source = "pytorch_cpu"}
 cryptography = "^43.0.0"
+spacy = "^3.7.5"
+langdetect = "^1.0.9"
 
 
 [tool.poetry.group.dev.dependencies]
